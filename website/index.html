@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EyeBreak — Smart Eye Break Reminders for Mac</title>
+    <meta name="description" content="Protect your eyes with smart break reminders using the 20-20-20 rule. Free macOS menu bar app.">
+    <meta property="og:title" content="EyeBreak — Your Eyes Deserve a Break">
+    <meta property="og:description" content="Smart eye break reminders using the 20-20-20 rule. Free for macOS.">
+    <meta property="og:type" content="website">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Language Toggle -->
+    <button class="lang-toggle" onclick="toggleLang()" aria-label="Switch language">
+        <span data-en>العربية</span>
+        <span data-ar hidden>English</span>
+    </button>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-icon">👁️</div>
+            <h1>
+                <span data-en>Your Eyes Deserve a Break</span>
+                <span data-ar hidden>عيونك تستاهل راحة</span>
+            </h1>
+            <p class="hero-sub">
+                <span data-en>Smart reminders using the 20-20-20 rule. Every 20 minutes, look at something 20 feet away for 20 seconds.</span>
+                <span data-ar hidden>تذكيرات ذكية بقاعدة 20-20-20. كل 20 دقيقة، انظر لشيء يبعد 6 أمتار لمدة 20 ثانية.</span>
+            </p>
+            <div class="hero-buttons">
+                <a href="#download" class="btn btn-primary">
+                    <span data-en>Download Free</span>
+                    <span data-ar hidden>تحميل مجاني</span>
+                </a>
+                <a href="#features" class="btn btn-secondary">
+                    <span data-en>Learn More</span>
+                    <span data-ar hidden>اعرف أكثر</span>
+                </a>
+            </div>
+            <p class="hero-meta">
+                <span data-en>macOS 13+ &middot; Free &middot; No account needed</span>
+                <span data-ar hidden>macOS 13+ &middot; مجاني &middot; بدون حساب</span>
+            </p>
+        </div>
+    </section>
+
+    <!-- Problem -->
+    <section class="section" id="problem">
+        <div class="container">
+            <h2>
+                <span data-en>The Problem</span>
+                <span data-ar hidden>المشكلة</span>
+            </h2>
+            <div class="cards">
+                <div class="card">
+                    <div class="card-icon">😵‍💫</div>
+                    <h3>
+                        <span data-en>Digital Eye Strain</span>
+                        <span data-ar hidden>إجهاد العيون الرقمي</span>
+                    </h3>
+                    <p>
+                        <span data-en>Hours of screen time causes headaches, dry eyes, and blurred vision.</span>
+                        <span data-ar hidden>ساعات أمام الشاشة تسبب صداع وجفاف وتشويش بالنظر.</span>
+                    </p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🧠</div>
+                    <h3>
+                        <span data-en>You Forget to Rest</span>
+                        <span data-ar hidden>تنسى تأخذ استراحة</span>
+                    </h3>
+                    <p>
+                        <span data-en>When you're focused, hours pass without a single break.</span>
+                        <span data-ar hidden>لما تركّز، تمر ساعات بدون ما تاخذ استراحة وحدة.</span>
+                    </p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">⏰</div>
+                    <h3>
+                        <span data-en>Regular Reminders Don't Work</span>
+                        <span data-ar hidden>التذكيرات العادية ما تنفع</span>
+                    </h3>
+                    <p>
+                        <span data-en>Notifications are too easy to dismiss. You need something harder to ignore.</span>
+                        <span data-ar hidden>الإشعارات سهل تتجاهلها. تحتاج شي أصعب تتجاوزه.</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution -->
+    <section class="section section-dark" id="solution">
+        <div class="container">
+            <h2>
+                <span data-en>The Solution: TV Static</span>
+                <span data-ar hidden>الحل: شاشة تلفزيون خربان</span>
+            </h2>
+            <p class="section-sub">
+                <span data-en>When it's break time, your screen fills with TV static noise. No countdown, no distractions — just a boring screen that makes you look away naturally.</span>
+                <span data-ar hidden>لما يجي وقت الاستراحة، شاشتك تتحول لتشويش تلفزيون قديم. بدون عداد، بدون إلهاء — بس شاشة مملة تخليك تنظر بعيد تلقائياً.</span>
+            </p>
+            <div class="static-demo">
+                <canvas id="staticCanvas" width="600" height="300"></canvas>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section class="section" id="features">
+        <div class="container">
+            <h2>
+                <span data-en>Free vs Pro</span>
+                <span data-ar hidden>المجاني vs Pro</span>
+            </h2>
+            <div class="pricing">
+                <div class="price-card">
+                    <div class="price-header">
+                        <h3>Free</h3>
+                        <div class="price">$0</div>
+                    </div>
+                    <ul>
+                        <li>✓ <span data-en>20-20-20 reminders</span><span data-ar hidden>تذكيرات 20-20-20</span></li>
+                        <li>✓ <span data-en>TV static overlay</span><span data-ar hidden>شاشة التشويش</span></li>
+                        <li>✓ <span data-en>Menu bar timer</span><span data-ar hidden>مؤقت في شريط القوائم</span></li>
+                        <li>✓ <span data-en>Pause, snooze, skip</span><span data-ar hidden>إيقاف، تأجيل، تخطي</span></li>
+                        <li>✓ <span data-en>Start at login</span><span data-ar hidden>تشغيل مع النظام</span></li>
+                        <li>✓ <span data-en>Arabic + English</span><span data-ar hidden>عربي + إنجليزي</span></li>
+                    </ul>
+                    <a href="#download" class="btn btn-primary">
+                        <span data-en>Download Free</span>
+                        <span data-ar hidden>تحميل مجاني</span>
+                    </a>
+                </div>
+                <div class="price-card price-pro">
+                    <div class="price-badge">Pro</div>
+                    <div class="price-header">
+                        <h3>EyeBreak Pro</h3>
+                        <div class="price">$4.99</div>
+                        <div class="price-note">
+                            <span data-en>one-time payment</span>
+                            <span data-ar hidden>دفعة واحدة</span>
+                        </div>
+                    </div>
+                    <ul>
+                        <li>✓ <span data-en>Everything in Free</span><span data-ar hidden>كل ميزات المجاني</span></li>
+                        <li>⭐ <span data-en>Weekly statistics & charts</span><span data-ar hidden>إحصائيات ورسوم بيانية أسبوعية</span></li>
+                        <li>⭐ <span data-en>Custom alert sounds</span><span data-ar hidden>أصوات تنبيه مخصصة</span></li>
+                        <li>⭐ <span data-en>Customize overlay style</span><span data-ar hidden>تخصيص شكل الشاشة</span></li>
+                        <li>⭐ <span data-en>Pomodoro mode</span><span data-ar hidden>وضع بومودورو</span></li>
+                        <li>⭐ <span data-en>Monthly reports</span><span data-ar hidden>تقارير شهرية</span></li>
+                    </ul>
+                    <a href="#download" class="btn btn-pro">
+                        <span data-en>Coming Soon</span>
+                        <span data-ar hidden>قريباً</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Download -->
+    <section class="section section-dark" id="download">
+        <div class="container center">
+            <h2>
+                <span data-en>Download EyeBreak</span>
+                <span data-ar hidden>حمّل EyeBreak</span>
+            </h2>
+            <p class="section-sub">
+                <span data-en>Free, lightweight, and works instantly. No account required.</span>
+                <span data-ar hidden>مجاني، خفيف، ويشتغل فوراً. بدون حساب.</span>
+            </p>
+            <a href="assets/EyeBreak-1.0.dmg" download class="btn btn-download">
+                <span data-en>⬇ Download for macOS (.dmg)</span>
+                <span data-ar hidden>⬇ تحميل لـ macOS (.dmg)</span>
+            </a>
+            <p class="download-meta">
+                <span data-en>Requires macOS 13 (Ventura) or later &middot; ~100 KB</span>
+                <span data-ar hidden>يتطلب macOS 13 (Ventura) أو أحدث &middot; ~100 كيلوبايت</span>
+            </p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>EyeBreak &copy; 2026</p>
+            <div class="footer-links">
+                <a href="https://github.com/MayadahAA/EyeBreak">GitHub</a>
+                <a href="https://producthunt.com">Product Hunt</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
