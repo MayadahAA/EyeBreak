@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 💬 Questions & Discussions
+    url: https://github.com/MayadahAA/EyeBreak/discussions
+    about: Ask questions or discuss ideas
+  - name: 🔒 Security Vulnerability
+    url: mailto:d.mayadah@gmail.com
+    about: Report security issues privately

@@ -16,6 +16,7 @@ final class TimerManager: ObservableObject {
 
     private var timer: Timer?
     private var targetFireDate: Date?
+    private var pausedRemainingSeconds: Int?
     private var screenTimeStartedAt: Date?
     private var settings: SettingsManager
     private var cancellable: AnyCancellable?
@@ -45,8 +46,14 @@ final class TimerManager: ObservableObject {
             .dropFirst()
             .receive(on: RunLoop.main)
             .sink { [weak self] _ in
-                guard let self, self.isRunning, !self.isPaused, !self.isOnBreak else { return }
-                self.resetInterval()
+                guard let self, !self.isOnBreak else { return }
+                if self.isPaused {
+                    // Adjust paused remaining to new interval
+                    self.pausedRemainingSeconds = Int(self.currentInterval)
+                    self.remainingSeconds = Int(self.currentInterval)
+                } else if self.isRunning {
+                    self.resetInterval()
+                }
             }
     }
 
@@ -61,7 +68,9 @@ final class TimerManager: ObservableObject {
     }
 
     func pause() {
+        guard isRunning, !isPaused else { return }
         isPaused = true
+        pausedRemainingSeconds = remainingSeconds
         timer?.invalidate()
         timer = nil
         accumulateScreenTime()
@@ -70,12 +79,15 @@ final class TimerManager: ObservableObject {
     func resume() {
         guard isPaused else { return }
         isPaused = false
-        if let target = targetFireDate {
-            if target.timeIntervalSinceNow <= 0 {
-                triggerBreak()
-                return
-            }
+        let resumeInterval = TimeInterval(pausedRemainingSeconds ?? Int(currentInterval))
+        pausedRemainingSeconds = nil
+
+        if resumeInterval <= 0 {
+            triggerBreak()
+            return
         }
+        targetFireDate = Date().addingTimeInterval(resumeInterval)
+        remainingSeconds = Int(resumeInterval)
         screenTimeStartedAt = Date()
         startTimer()
     }

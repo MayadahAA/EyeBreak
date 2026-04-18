@@ -116,6 +116,15 @@ enum L10n {
     static var upToDate: String {
         lang == .arabic ? "أنت على آخر نسخة" : "You're up to date"
     }
+    static var interval: String {
+        lang == .arabic ? "الفاصل" : "Interval"
+    }
+    static var intervalDuration: String {
+        lang == .arabic ? "مدة الفاصل" : "Interval Duration"
+    }
+    static var minuteUnit: String {
+        lang == .arabic ? "د" : "m"
+    }
 
     // MARK: - Overlay
     static var overlayTitle: String {

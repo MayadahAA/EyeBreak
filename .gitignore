@@ -3,4 +3,17 @@
 build/
 .claude/
 *.swp
+
+# Internal launch notes (not for public)
 LAUNCH-GUIDE.md
+
+# Pro/paid features — kept local only, built into distributed DMG
+Sources/EyeBreak/Pro/
+Sources/EyeBreak/Pro*.swift
+PRO-NOTES.md
+*.p8
+*.p12
+
+# Apple Developer credentials
+ExportOptions.plist
+*.mobileprovision
