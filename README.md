@@ -174,13 +174,13 @@ bash scripts/create-dmg.sh
 - [ ] **v1.3** — Apple Notarization (no security warnings)
 - [ ] **v2.0** — iOS companion app (Shortcut integration)
 
-See [CHANGELOG.md](./CHANGELOG.md) for version history.
+See [CHANGELOG.md](./docs/CHANGELOG.md) for version history.
 
 ---
 
 ## Contributing
 
-Contributions welcome! Please read [CONTRIBUTING.md](./CONTRIBUTING.md) first.
+Contributions welcome! Please read [CONTRIBUTING.md](./docs/CONTRIBUTING.md) first.
 
 **Quick guide:**
 1. Fork the repo
