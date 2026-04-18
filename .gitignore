@@ -3,3 +3,4 @@
 build/
 .claude/
 *.swp
+.LAUNCH-GUIDE.md
