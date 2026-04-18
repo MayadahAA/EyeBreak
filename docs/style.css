@@ -32,15 +32,30 @@ body::selection { background: rgba(255, 255, 255, 0.2); }
   height: 100%;
   pointer-events: none;
   z-index: 0;
-  opacity: 0.05;
-  mix-blend-mode: screen;
-  transition: opacity 0.7s ease-in-out;
+  opacity: 0.4;
+  image-rendering: pixelated;
+  transition: opacity 0.6s ease-in-out;
 }
 
 #tv-static.full {
-  z-index: 50;
+  z-index: 9999;
   opacity: 1;
-  mix-blend-mode: normal;
+  transition: opacity 0.2s ease-out;
+}
+
+/* Black overlay that blocks content during "Try it now" */
+#break-bg {
+  position: fixed;
+  inset: 0;
+  background: #000;
+  z-index: -1;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease-out;
+}
+#break-bg.active {
+  z-index: 9998;
+  opacity: 1;
 }
 
 /* Wrapper */

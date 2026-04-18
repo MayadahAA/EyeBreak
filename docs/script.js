@@ -148,21 +148,31 @@ document.getElementById('lang-toggle').addEventListener('click', () => {
   window.addEventListener('resize', resize);
   resize();
 
-  function draw() {
+  let lastDraw = 0;
+  function draw(ts) {
+    // Throttle to ~8fps to match the app's 0.12s interval
+    if (ts - lastDraw < 120) {
+      requestAnimationFrame(draw);
+      return;
+    }
+    lastDraw = ts;
+
     const w = canvas.width;
     const h = canvas.height;
     if (w > 0 && h > 0) {
       const idata = ctx.createImageData(w, h);
       const buffer32 = new Uint32Array(idata.data.buffer);
+
+      // Match app exactly: dark gray range (6-42 of 255) in both modes
       for (let i = 0; i < buffer32.length; i++) {
-        const noise = Math.random() * 255;
+        const noise = 6 + Math.floor(Math.random() * 37);
         buffer32[i] = (255 << 24) | (noise << 16) | (noise << 8) | noise;
       }
       ctx.putImageData(idata, 0, 0);
     }
     requestAnimationFrame(draw);
   }
-  draw();
+  requestAnimationFrame(draw);
 })();
 
 // Scroll-based opacity
@@ -172,15 +182,19 @@ window.addEventListener('scroll', () => {
   const total = document.documentElement.scrollHeight - document.documentElement.clientHeight;
   if (total <= 0) return;
   const scroll = document.documentElement.scrollTop / total;
-  const opacity = 0.05 + Math.min(Math.max(scroll, 0), 1) * 0.10;
+  // Subtle at top (0.4), stronger as you scroll (0.85)
+  const opacity = 0.4 + Math.min(Math.max(scroll, 0), 1) * 0.45;
   staticCanvas.style.opacity = opacity;
 });
 
 // Try Now — full static for 5 seconds
+const breakBg = document.getElementById('break-bg');
 document.getElementById('try-now-btn').addEventListener('click', () => {
+  breakBg.classList.add('active');
   staticCanvas.classList.add('full');
   document.body.style.cursor = 'none';
   setTimeout(() => {
+    breakBg.classList.remove('active');
     staticCanvas.classList.remove('full');
     document.body.style.cursor = 'auto';
   }, 5000);
