@@ -5,6 +5,7 @@ import Combine
 @MainActor
 final class TimerManager: ObservableObject {
     @Published var remainingSeconds: Int = 0
+    @Published var currentCycleSeconds: Int = 1200  // Total seconds in current cycle (for arc progress)
     @Published var isRunning = false
     @Published var isPaused = false
     @Published var isOnBreak = false
@@ -51,6 +52,7 @@ final class TimerManager: ObservableObject {
                     // Adjust paused remaining to new interval
                     self.pausedRemainingSeconds = Int(self.currentInterval)
                     self.remainingSeconds = Int(self.currentInterval)
+                    self.currentCycleSeconds = Int(self.currentInterval)
                 } else if self.isRunning {
                     self.resetInterval()
                 }
@@ -61,6 +63,7 @@ final class TimerManager: ObservableObject {
         let interval = currentInterval
         targetFireDate = Date().addingTimeInterval(interval)
         remainingSeconds = Int(interval)
+        currentCycleSeconds = Int(interval)
         isRunning = true
         isPaused = false
         screenTimeStartedAt = Date()
@@ -93,11 +96,25 @@ final class TimerManager: ObservableObject {
     }
 
     func snooze(minutes: Int) {
-        if isOnBreak { endBreak() }
-        targetFireDate = Date().addingTimeInterval(TimeInterval(minutes * 60))
-        remainingSeconds = minutes * 60
+        let addedSeconds = TimeInterval(minutes * 60)
+
+        let newRemaining: TimeInterval
+        if isOnBreak {
+            // Skip current break + start a fresh snooze countdown
+            endBreak()
+            newRemaining = addedSeconds
+        } else {
+            // Extend the current countdown by the snooze duration
+            let currentRemaining = max(targetFireDate?.timeIntervalSinceNow ?? 0, 0)
+            newRemaining = currentRemaining + addedSeconds
+        }
+
+        targetFireDate = Date().addingTimeInterval(newRemaining)
+        remainingSeconds = Int(newRemaining)
+        currentCycleSeconds = Int(newRemaining)  // Reset arc reference to match new total
         isPaused = false
         isRunning = true
+        if screenTimeStartedAt == nil { screenTimeStartedAt = Date() }
         startTimer()
     }
 
@@ -186,6 +203,7 @@ final class TimerManager: ObservableObject {
         let interval = currentInterval
         targetFireDate = Date().addingTimeInterval(interval)
         remainingSeconds = Int(interval)
+        currentCycleSeconds = Int(interval)
         isRunning = true
         isPaused = false
         startTimer()

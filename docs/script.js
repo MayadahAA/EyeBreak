@@ -39,6 +39,20 @@ const dict = {
     feature2Desc: "شاشة تشويش لطيفة تجبرك على أخذ استراحة فعلية والابتعاد عن الشاشة.",
     feature3Title: "خفيف وسريع",
     feature3Desc: "يعمل بصمت في الخلفية دون استهلاك موارد جهازك.",
+    pressEscToSkip: "اضغط ESC للتخطي",
+    tryHint: "↑ اضغط لتجربة استراحة ٥ ثواني الآن",
+    howItWorks: "كيف يعمل التطبيق",
+    step1Title: "يسكن في شريط القوائم",
+    step1Desc: "أيقونة عين صغيرة في أعلى الشاشة، لا تزعج عملك.",
+    step2Title: "مؤقت ذكي 20 دقيقة",
+    step2Desc: "يعد تنازلياً في الخلفية، يمكنك إيقافه أو تأجيله في أي وقت.",
+    step3Title: "شاشة تشويش للاستراحة",
+    step3Desc: "لمدة 20 ثانية، الشاشة تصبح مملة فتضطر للنظر بعيداً.",
+    nextBreak: "الاستراحة القادمة",
+    waitlistLabel: "نبّهني لما يصير متاح",
+    notify: "نبّهني",
+    waitlistSuccess: "✓ تم! بنخبرك أول ما ينطلق",
+    emailPlaceholder: "you@example.com",
     langSwitch: "English"
   },
   en: {
@@ -80,6 +94,20 @@ const dict = {
     feature2Desc: "A gentle TV static overlay that forces you to take a real break.",
     feature3Title: "Light & Fast",
     feature3Desc: "Runs silently in the background without draining your system resources.",
+    pressEscToSkip: "Press ESC to skip",
+    tryHint: "↑ Click to try a 5-second break now",
+    howItWorks: "How it Works",
+    step1Title: "Lives in Your Menu Bar",
+    step1Desc: "A tiny eye icon sits at the top of your screen. Never in the way.",
+    step2Title: "Smart 20-Minute Timer",
+    step2Desc: "Counts down silently in the background. Pause or snooze anytime.",
+    step3Title: "TV Static Break Screen",
+    step3Desc: "For 20 seconds, your screen becomes boring enough to make you look away.",
+    nextBreak: "Next break",
+    waitlistLabel: "Notify me when it's available",
+    notify: "Notify me",
+    waitlistSuccess: "✓ You're in! We'll email you at launch.",
+    emailPlaceholder: "you@example.com",
     langSwitch: "العربية"
   }
 };
@@ -124,6 +152,11 @@ function applyLang(lang) {
   document.querySelectorAll('[data-i18n]').forEach(el => {
     const key = el.getAttribute('data-i18n');
     if (t[key]) el.textContent = t[key];
+  });
+
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+    const key = el.getAttribute('data-i18n-placeholder');
+    if (t[key]) el.setAttribute('placeholder', t[key]);
   });
 
   renderFeatureList('features-free', t.featuresFree);
@@ -187,17 +220,87 @@ window.addEventListener('scroll', () => {
   staticCanvas.style.opacity = opacity;
 });
 
-// Try Now — full static for 5 seconds
+// Try Now — full static for 5 seconds (or ESC to skip)
 const breakBg = document.getElementById('break-bg');
-document.getElementById('try-now-btn').addEventListener('click', () => {
+const breakHint = document.getElementById('break-hint');
+let breakTimeout = null;
+
+function endBreak() {
+  breakBg.classList.remove('active');
+  staticCanvas.classList.remove('full');
+  breakHint.classList.remove('active');
+  document.body.style.cursor = 'auto';
+  if (breakTimeout) { clearTimeout(breakTimeout); breakTimeout = null; }
+}
+
+function startBreak() {
   breakBg.classList.add('active');
   staticCanvas.classList.add('full');
+  breakHint.classList.add('active');
   document.body.style.cursor = 'none';
-  setTimeout(() => {
-    breakBg.classList.remove('active');
-    staticCanvas.classList.remove('full');
-    document.body.style.cursor = 'auto';
-  }, 5000);
+  breakTimeout = setTimeout(endBreak, 5000);
+}
+
+document.getElementById('try-now-btn').addEventListener('click', startBreak);
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && staticCanvas.classList.contains('full')) {
+    endBreak();
+  }
+});
+
+// Mini static canvas (for "How it works" step 3)
+(function initMiniStatic() {
+  const mini = document.getElementById('mini-static');
+  if (!mini) return;
+  const ctx = mini.getContext('2d', { alpha: false });
+
+  function resize() {
+    const rect = mini.getBoundingClientRect();
+    mini.width = Math.max(1, Math.floor(rect.width / 2));
+    mini.height = Math.max(1, Math.floor(rect.height / 2));
+  }
+  window.addEventListener('resize', resize);
+  setTimeout(resize, 50);
+
+  let last = 0;
+  function draw(ts) {
+    if (ts - last < 150) {
+      requestAnimationFrame(draw);
+      return;
+    }
+    last = ts;
+    const w = mini.width, h = mini.height;
+    if (w > 0 && h > 0) {
+      const idata = ctx.createImageData(w, h);
+      const buf32 = new Uint32Array(idata.data.buffer);
+      for (let i = 0; i < buf32.length; i++) {
+        const n = 6 + Math.floor(Math.random() * 37);
+        buf32[i] = (255 << 24) | (n << 16) | (n << 8) | n;
+      }
+      ctx.putImageData(idata, 0, 0);
+    }
+    requestAnimationFrame(draw);
+  }
+  requestAnimationFrame(draw);
+})();
+
+// Waitlist form — stores email locally + opens mailto as fallback
+document.getElementById('waitlist-form').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const emailInput = document.getElementById('waitlist-email');
+  const email = emailInput.value.trim();
+  if (!email) return;
+
+  // Store locally (replace with real API: Buttondown, Mailchimp, etc.)
+  const existing = JSON.parse(localStorage.getItem('eyebreak_waitlist') || '[]');
+  if (!existing.includes(email)) existing.push(email);
+  localStorage.setItem('eyebreak_waitlist', JSON.stringify(existing));
+
+  // Show success state
+  const form = document.getElementById('waitlist-form');
+  const success = document.getElementById('waitlist-success');
+  form.classList.add('submitted');
+  success.classList.add('show');
 });
 
 applyLang('ar');

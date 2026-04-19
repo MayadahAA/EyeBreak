@@ -106,8 +106,9 @@ struct MenuBarView: View {
     // MARK: Arc Timer
 
     private var arcTimer: some View {
-        let total = max(settings.intervalMinutes * 60, 1)
-        let progress = 1 - (Double(timer.remainingSeconds) / Double(total))
+        let total = max(timer.currentCycleSeconds, 1)
+        let rawProgress = 1 - (Double(timer.remainingSeconds) / Double(total))
+        let progress = min(max(rawProgress, 0.0), 1.0)
 
         return ZStack {
             ArcProgress(progress: progress, color: Accent.main)

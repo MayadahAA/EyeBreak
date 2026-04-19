@@ -14,6 +14,7 @@ struct EyeBreakApp: App {
                     .environmentObject(timer)
                     .environmentObject(settings)
                     .environmentObject(updater)
+                    .environment(\.layoutDirection, settings.appLanguage == .arabic ? .rightToLeft : .leftToRight)
             } else {
                 ProgressView()
                     .onAppear { setupTimer() }
